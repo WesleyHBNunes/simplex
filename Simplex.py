@@ -61,6 +61,7 @@ def calculate_reduced_coasts(matrix, no_basics, coefficients, cb, base_inverted,
     variable_go_base = -1,
     iteration = -1
     index_variable_go_base = iteration
+
     for i in no_basics:
         iteration += 1
         aj = return_aj(matrix, lines, i)
