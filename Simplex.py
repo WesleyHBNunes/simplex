@@ -18,8 +18,8 @@ def simplex(matrix, coefficients, b, base, basics, no_basics, lines):
         value_objective_function = np.matmul(np.matmul(cb, base_inverted), b)
         print("Value of partial objective function: " + str(value_objective_function))
 
-        variable_go_base, lowest_reduced_cost = calculate_reduced_coasts(matrix, no_basics, coefficients, cb,
-                                                                         base_inverted, lines)
+        variable_go_base, lowest_reduced_cost, index_variable_go_base = calculate_reduced_coasts(
+            matrix, no_basics, coefficients, cb, base_inverted, lines)
 
         if lowest_reduced_cost >= 0:
             print()
@@ -32,7 +32,7 @@ def simplex(matrix, coefficients, b, base, basics, no_basics, lines):
 
         direction_vectors = calculate_direction_vectors(matrix, base_inverted, no_basics, lines)
 
-        direction_vector_variable_go_base = direction_vectors[variable_go_base]
+        direction_vector_variable_go_base = direction_vectors[index_variable_go_base]
 
         variable_out_of_base = calculate_the_lowest_theta(direction_vector_variable_go_base, value_variables,
                                                           basics, lines)
@@ -40,7 +40,7 @@ def simplex(matrix, coefficients, b, base, basics, no_basics, lines):
         print("Go out to base: (x" + str(basics[variable_out_of_base]) + ")")
         print("Go to the base: (x" + str(variable_go_base) + ")")
         base, basics, no_basics = updated_base_basics_no_basics(matrix, base, basics, no_basics, variable_go_base,
-                                                                variable_out_of_base, lines)
+                                                                index_variable_go_base, variable_out_of_base, lines)
 
         print("New base: \n" + str(base))
         print("New basics variables: " + str(basics))
@@ -59,8 +59,10 @@ def calculate_reduced_coasts(matrix, no_basics, coefficients, cb, base_inverted,
     reduced_cost = []
     lowest_reduced_cost = (np.inf, -1)
     variable_go_base = -1,
-
+    iteration = -1
+    index_variable_go_base = iteration
     for i in no_basics:
+        iteration += 1
         aj = return_aj(matrix, lines, i)
         result = coefficients[i] - np.matmul(np.matmul(cb, base_inverted), aj)
         print("Reduced Coast (x" + str(i) + "): " + str(result))
@@ -68,7 +70,8 @@ def calculate_reduced_coasts(matrix, no_basics, coefficients, cb, base_inverted,
         if result < lowest_reduced_cost[0]:
             lowest_reduced_cost = result
             variable_go_base = i
-    return variable_go_base, lowest_reduced_cost
+            index_variable_go_base = iteration
+    return variable_go_base, lowest_reduced_cost, index_variable_go_base
 
 
 def calculate_direction_vectors(matrix, base_inverted, no_basics, lines):
@@ -100,10 +103,11 @@ def calculate_the_lowest_theta(direction_vector_variable_go_base, value_variable
     return variable_out_of_base
 
 
-def updated_base_basics_no_basics(matrix, base, basics, no_basics, variable_go_base, variable_out_of_base, lines):
+def updated_base_basics_no_basics(matrix, base, basics, no_basics, variable_go_base, index_variable_go_base,
+                                  variable_out_of_base, lines):
     aux = basics[variable_out_of_base]
     basics[variable_out_of_base] = variable_go_base
-    no_basics[variable_go_base] = aux
+    no_basics[index_variable_go_base] = aux
 
     for i in range(lines):
         base[i, variable_out_of_base] = matrix[i, basics[variable_out_of_base]]
@@ -135,6 +139,10 @@ if __name__ == '__main__':
     #         [-6, -6, 0, 0, 0], [24, 21, 8], np.matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
     #        [2, 3, 4], [0, 1], 3)
 
-    simplex(np.matrix([[1, 1, 1, 0, 0], [1, -1, 0, 1, 0], [-1, 1, 0, 0, 1]]),
-            [-1, -1, 0, 0, 0], [6, 4, 4], np.matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
-            [2, 3, 4], [0, 1], 3)
+    # simplex(np.matrix([[1, 1, 1, 0, 0], [1, -1, 0, 1, 0], [-1, 1, 0, 0, 1]]),
+    #         [-1, -1, 0, 0, 0], [6, 4, 4], np.matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
+    #         [2, 3, 4], [0, 1], 3)
+
+    simplex(np.matrix([[1, -4, 1, 0, 0, 0], [-2, 1, 0, 1, 0, 0], [-3, 4, 0, 0, 1, 0], [2, 1, 0, 0, 0, 1]]),
+            [-1, -2, 0, 0, 0, 0], [4, 2, 12, 8], np.matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]),
+            [2, 3, 4, 5], [0, 1], 4)
