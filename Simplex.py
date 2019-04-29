@@ -100,7 +100,7 @@ def calculate_the_lowest_theta(direction_vector_variable_go_base, value_variable
                 variable_out_of_base = i
         else:
             print("Theta x(" + str(basics[i]) + "): " + str(value_variables[0, i]) + "/" +
-                  str(direction_vector_variable_go_base[0, i]) + " -> " + "Infinity")
+                  str(direction_vector_variable_go_base[0, i]) + " -> " + "Infinity or Negative value")
     return variable_out_of_base
 
 
