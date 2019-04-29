@@ -3,9 +3,9 @@ import numpy as np
 
 def simplex(matrix, coefficients, b, base, basics, no_basics, lines):
     iteration = 0
-    not_solved = True
+    solved = True
 
-    while not_solved:
+    while not solved:
         iteration += 1
         print(str(iteration) + "ª iteration")
         base_inverted = base.I
@@ -27,7 +27,7 @@ def simplex(matrix, coefficients, b, base, basics, no_basics, lines):
             print("Value of basics variables (b): " + str(value_variables))
             print("Basics: " + str(basics))
             print("No basics: " + str(no_basics))
-            not_solved = False
+            solved = False
             continue
 
         direction_vectors = calculate_direction_vectors(matrix, base_inverted, no_basics, lines)
