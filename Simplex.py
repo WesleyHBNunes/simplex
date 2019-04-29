@@ -3,9 +3,9 @@ import numpy as np
 
 def simplex(matrix, coefficients, b, base, basics, no_basics, lines):
     iteration = 0
-    not_end = True
+    not_solved = True
 
-    while not_end:
+    while not_solved:
         iteration += 1
         print(str(iteration) + "ª iteration")
         base_inverted = base.I
@@ -27,7 +27,7 @@ def simplex(matrix, coefficients, b, base, basics, no_basics, lines):
             print("Value of basics variables (b): " + str(value_variables))
             print("Basics: " + str(basics))
             print("No basics: " + str(no_basics))
-            not_end = False
+            not_solved = False
             continue
 
         direction_vectors = calculate_direction_vectors(matrix, base_inverted, no_basics, lines)
@@ -117,18 +117,18 @@ def return_aj(matrix, lines, variable):
     return aj
 
 
-# Tests
-simplex(np.matrix([[4, 6, 1, 0, 0], [4, 2, 0, 1, 0], [0, 1, 0, 0, 1]]),
-        [-80, -60, 0, 0, 0], [24, 16, 3], np.matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
-        [2, 3, 4], [0, 1], 3)
+if __name__ == '__main__':
 
+    simplex(np.matrix([[4, 6, 1, 0, 0], [4, 2, 0, 1, 0], [0, 1, 0, 0, 1]]),
+            [-80, -60, 0, 0, 0], [24, 16, 3], np.matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
+            [2, 3, 4], [0, 1], 3)
 
-# simplex(np.matrix([[1, -2, 1, 0, 0], [-2, 1, 0, 1, 0], [5, 3, 0, 0, 1]]),
-#         [-1, -3, 0, 0, 0], [0, 4, 15], np.matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
-#         [2, 3, 4], [0, 1], 3)
+    # simplex(np.matrix([[1, -2, 1, 0, 0], [-2, 1, 0, 1, 0], [5, 3, 0, 0, 1]]),
+    #         [-1, -3, 0, 0, 0], [0, 4, 15], np.matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
+    #         [2, 3, 4], [0, 1], 3)
 
-# simplex(np.matrix([[1, 1, 1, 0], [3, 2, 0, 1]]),
-#         [-2, -4, 0, 0], [3, 14], np.matrix([[1, 0], [0, 1]]),
-#         [2, 3], [0, 1], 2)
+    # simplex(np.matrix([[1, 1, 1, 0], [3, 2, 0, 1]]),
+    #         [-2, -4, 0, 0], [3, 14], np.matrix([[1, 0], [0, 1]]),
+    #         [2, 3], [0, 1], 2)
 
 
