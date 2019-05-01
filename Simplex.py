@@ -109,9 +109,9 @@ def updated_base_basics_no_basics(matrix, base, basics, no_basics, variable_go_b
     aux = basics[variable_out_of_base]
     basics[variable_out_of_base] = variable_go_base
     no_basics[index_variable_go_base] = aux
-
     for i in range(lines):
-        base[i, variable_out_of_base] = matrix[i, basics[variable_out_of_base]]
+        aux = matrix[i, basics[variable_out_of_base]]
+        base[i, variable_out_of_base] = aux
     return base, basics, no_basics
 
 
@@ -143,10 +143,24 @@ if __name__ == '__main__':
     #         [-1, -1, 0, 0, 0], [6, 4, 4], np.matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
     #         [2, 3, 4], [0, 1], 3)
 
-    simplex(matrix=np.matrix([[1, -4, 1, 0, 0, 0], [-2, 1, 0, 1, 0, 0], [-3, 4, 0, 0, 1, 0], [2, 1, 0, 0, 0, 1]]),
-            coefficients=[-1, -2, 0, 0, 0, 0],
-            b=[4, 2, 12, 8],
-            base=np.matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]),
-            basics=[2, 3, 4, 5],
-            no_basics=[0, 1],
+    # simplex(matrix=np.matrix([[1, -4, 1, 0, 0, 0], [-2, 1, 0, 1, 0, 0], [-3, 4, 0, 0, 1, 0], [2, 1, 0, 0, 0, 1]]),
+    #         coefficients=[-1, -2, 0, 0, 0, 0],
+    #         b=[4, 2, 12, 8],
+    #         base=np.matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]),
+    #         basics=[2, 3, 4, 5],
+    #         no_basics=[0, 1],
+    #         lines=4)
+
+    # [3.29] Bazaraa Book, page: 142
+    simplex(matrix=np.matrix([[5, 1, -1, 2, 1, 0, 0, 0], [-14, -3, 3, -5, 0, 1, 0, 0],
+            [2, 1/2, -1/2, 1/2, 0, 0, 1, 0], [3, 1/2, 1/2, 3/2, 0, 0, 0, 1]]),
+            coefficients=[-11, -2, 1, -3, -4, -1, 0, 0],
+            b=[12, 2, 5/2, 3],
+            base=np.matrix([[1, .0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]),
+            basics=[4, 5, 6, 7],
+            no_basics=[0, 1, 2, 3],
             lines=4)
+
+    # simplex(np.matrix([[50, 100, 0, 0], [3, 2, 1, 0], [100, 30, 0, 1]]),
+    #         [-30, -20, 0, 0], [1000, 35, 900], np.matrix([[50, 0, 0], [3, 1, 0], [100, 0, 1]]),
+    #         [0, 2, 3], [1], 3)
