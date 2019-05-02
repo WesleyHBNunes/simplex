@@ -4,6 +4,9 @@ import numpy as np
 def simplex(matrix, coefficients, b, base, basics, no_basics, lines):
     iteration = 0
     solved = False
+    print("Initial matrix: \n" + str(matrix))
+    print("Initial base: \n" + str(base))
+    print("Initial basics variables: " + str(basics) + "\n")
 
     while not solved:
         iteration += 1
@@ -11,6 +14,10 @@ def simplex(matrix, coefficients, b, base, basics, no_basics, lines):
         base_inverted = base.I
         print("Base inverted:\n " + str(base_inverted))
         value_variables = np.matmul(base_inverted, b)
+        if verify_invalid_base(np.matrix(value_variables)):
+            print("Variables Values (b): " + str(value_variables))
+            print("Base invalid :(")
+            return
         print("Variables Values (b): " + str(value_variables))
         cb = create_cb(basics, coefficients)
         print("Coefficients basics (cb): " + str(cb))
@@ -122,6 +129,13 @@ def return_aj(matrix, lines, variable):
     return aj
 
 
+def verify_invalid_base(value_variables):
+    if any(value_variables[0, i] < 0 for i in range(len(value_variables.A[0]))):
+        return True
+    else:
+        return False
+
+
 if __name__ == '__main__':
     # simplex(np.matrix([[4, 6, 1, 0, 0], [4, 2, 0, 1, 0], [0, 1, 0, 0, 1]]),
     #         [-80, -60, 0, 0, 0], [24, 16, 3], np.matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
@@ -152,15 +166,20 @@ if __name__ == '__main__':
     #         lines=4)
 
     # [3.29] Bazaraa Book, page: 142
-    simplex(matrix=np.matrix([[5, 1, -1, 2, 1, 0, 0, 0], [-14, -3, 3, -5, 0, 1, 0, 0],
-            [2, 1/2, -1/2, 1/2, 0, 0, 1, 0], [3, 1/2, 1/2, 3/2, 0, 0, 0, 1]]),
-            coefficients=[-11, -2, 1, -3, -4, -1, 0, 0],
-            b=[12, 2, 5/2, 3],
-            base=np.matrix([[1, .0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]),
-            basics=[4, 5, 6, 7],
-            no_basics=[0, 1, 2, 3],
-            lines=4)
+    # simplex(matrix=np.matrix([[5, 1, -1, 2, 1, 0, 0, 0], [-14, -3, 3, -5, 0, 1, 0, 0],
+    #         [2, 1/2, -1/2, 1/2, 0, 0, 1, 0], [3, 1/2, 1/2, 3/2, 0, 0, 0, 1]]),
+    #         coefficients=[-11, -2, 1, -3, -4, -1, 0, 0],
+    #         b=[12, 2, 5/2, 3],
+    #         base=np.matrix([[1, .0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]),
+    #         basics=[4, 5, 6, 7],
+    #         no_basics=[0, 1, 2, 3],
+    #         lines=4)
 
-    # simplex(np.matrix([[50, 100, 0, 0], [3, 2, 1, 0], [100, 30, 0, 1]]),
-    #         [-30, -20, 0, 0], [1000, 35, 900], np.matrix([[50, 0, 0], [3, 1, 0], [100, 0, 1]]),
-    #         [0, 2, 3], [1], 3)
+    # Base = {x0, x2, x3} invalid
+    simplex(matrix=np.matrix([[50, 100, 0, 0], [3, 2, 1, 0], [100, 30, 0, 1]]),
+            coefficients=[-30, -20, 0, 0],
+            b=[1000, 35, 900],
+            base=np.matrix([[50, 0, 0], [3, 1, 0], [100, 0, 1]]),
+            basics=[0, 2, 3],
+            no_basics=[1],
+            lines=3)
